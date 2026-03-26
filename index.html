@@ -34,7 +34,6 @@
         h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
         .subtitle { color: #999; font-size: 0.85rem; font-weight: 500; }
 
-        /* Result Area */
         .result-card {
             width: 100%; background: #fafafa; border: 1px solid var(--accent);
             border-radius: var(--radius); padding: 30px 20px; margin-bottom: 20px;
@@ -44,7 +43,6 @@
         .section-label { font-size: 0.7rem; font-weight: 800; color: #bbb; text-transform: uppercase; margin-bottom: 10px; }
         #finalName { font-size: 1.4rem; font-weight: 800; color: var(--main); word-break: break-all; text-align: center; }
 
-        /* Input Section */
         .input-section { width: 100%; margin-bottom: 20px; }
         .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 5px; }
         .input-label { font-size: 0.75rem; font-weight: 800; color: #999; text-transform: uppercase; }
@@ -56,7 +54,6 @@
             font-size: 1.1rem; font-weight: 600; color: var(--main); outline: none;
         }
 
-        /* Sequential Controls */
         .controls { display: flex; gap: 10px; width: 100%; margin-bottom: 25px; }
         .num-box {
             flex: 1; background: #fafafa; border: 1px solid var(--accent);
@@ -70,7 +67,6 @@
         }
         .btn-step:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* Copy Button */
         .copy-btn {
             width: 100%; background: var(--main); color: #fff; border: none;
             padding: 20px; border-radius: var(--radius); font-size: 1.1rem;
@@ -78,7 +74,6 @@
         }
         .copy-btn:active { transform: scale(0.98); }
 
-        /* Footer Parts */
         .footer-btns { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: auto; padding: 20px 0; }
         .kofi-btn, .home-btn {
             display: inline-flex; align-items: center; padding: 12px 20px;
@@ -109,7 +104,7 @@
 <div class="fridge-container">
     <header>
         <h1>Title Namer</h1>
-        <p class="subtitle">Standardize your file titles instantly.</p>
+        <p class="subtitle">Orderly filenames for your daily work.</p>
     </header>
 
     <div class="result-card" id="resultCard">
@@ -185,10 +180,10 @@
     const dateStr = getYYMMDD();
 
     function update() {
-        // Space to _ and remove forbidden OS characters
+        // ★修正：スペースと禁止記号をすべてアンダーバー(_)に変換し、連続するアンダーバーを1つにまとめる
         let name = projInput.value
-            .replace(/\s+/g, '_')
-            .replace(/[\\/:*?"<>|]/g, '');
+            .replace(/[\s\\/:*?"<>|]+/g, '_') 
+            .replace(/_+/g, '_'); // 連続したアンダーバーを1つにする
         
         const displayLabel = name || "title";
         const seqStr = String(sequence).padStart(2, '0');
