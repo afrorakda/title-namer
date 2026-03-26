@@ -78,7 +78,7 @@
         }
         .copy-btn:active { transform: scale(0.98); }
 
-        /* Common Footer Parts */
+        /* Footer Parts */
         .footer-btns { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: auto; padding: 20px 0; }
         .kofi-btn, .home-btn {
             display: inline-flex; align-items: center; padding: 12px 20px;
@@ -92,10 +92,9 @@
         #toast {
             position: fixed; bottom: 100px; background: rgba(0,0,0,0.8); color: #fff;
             padding: 10px 20px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 2000;
         }
         
-        /* Modal (固定仕様:憲法遵守) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { 
             background: #fff; padding: 30px; border-radius: 20px; 
@@ -110,24 +109,24 @@
 <div class="fridge-container">
     <header>
         <h1>Title Namer</h1>
-        <p class="subtitle">YYMMDD order for your files.</p>
+        <p class="subtitle">Standardize your file titles instantly.</p>
     </header>
 
     <div class="result-card" id="resultCard">
-        <span class="section-label">Generated Name (Tap to Copy)</span>
+        <span class="section-label">Tap to Copy</span>
         <div id="finalName">260326_title_01</div>
     </div>
 
     <div class="input-section">
         <div class="input-header">
-            <span class="input-label">Project Name</span>
+            <span class="input-label">Project / Content</span>
             <span class="clr-link" id="clrAll">[ Clr All ]</span>
         </div>
         <input type="text" id="projInput" placeholder="project_name" autocomplete="off" spellcheck="false">
     </div>
 
     <div class="input-header" style="width: 100%;">
-        <span class="input-label">Sequence No.</span>
+        <span class="input-label">Sequence</span>
     </div>
     <div class="controls">
         <button class="btn-step" id="minusBtn">−</button>
@@ -135,7 +134,7 @@
         <button class="btn-step" id="plusBtn">+</button>
     </div>
 
-    <button class="copy-btn" id="mainCopyBtn">COPY NAME</button>
+    <button class="copy-btn" id="mainCopyBtn">COPY FILENAME</button>
 
     <div class="footer-btns">
         <a href="https://ko-fi.com/afrorakda" target="_blank" class="kofi-btn">🍵 Support me on Ko-fi</a>
@@ -154,10 +153,10 @@
     <div class="modal-content">
         <span class="close-icon" id="closeModal">&times;</span>
         <div class="modal-title-row"><span>📱</span><strong>Install</strong></div>
-        <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">Add to your home screen.</p>
+        <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">Add to home screen.</p>
         <div style="font-size: 0.95rem; line-height: 1.5; color: #333;">
             <p>🍏 <strong>iPhone:</strong> Share > Add to Home Screen</p>
-            <p style="margin-top:10px;">🤖 <strong>Android:</strong> Menu > Add to Home Screen</p>
+            <p style="margin-top:10px;">🤖 <strong>Android:</strong> Menu > Add to home screen</p>
         </div>
     </div>
 </div>
@@ -175,7 +174,6 @@
 
     let sequence = 1;
 
-    // 1. Get YYMMDD
     function getYYMMDD() {
         const d = new Date();
         const yy = String(d.getFullYear()).slice(-2);
@@ -186,21 +184,17 @@
 
     const dateStr = getYYMMDD();
 
-    // 2. Update logic
     function update() {
-        // Sanitize: Space to _, and remove risky chars
+        // Space to _ and remove forbidden OS characters
         let name = projInput.value
             .replace(/\s+/g, '_')
             .replace(/[\\/:*?"<>|]/g, '');
         
-        if (!name) name = "title";
-        
+        const displayLabel = name || "title";
         const seqStr = String(sequence).padStart(2, '0');
-        const result = `${dateStr}_${name}_${seqStr}`;
-        finalName.textContent = result;
+        finalName.textContent = `${dateStr}_${displayLabel}_${seqStr}`;
     }
 
-    // 3. Events
     projInput.oninput = update;
 
     plusBtn.onclick = () => { sequence++; seqDisplay.textContent = String(sequence).padStart(2, '0'); update(); };
@@ -218,12 +212,10 @@
     mainCopyBtn.onclick = copyResult;
     resultCard.onclick = copyResult;
 
-    // Modal
     document.getElementById('homeBtn').onclick = () => document.getElementById('modal').style.display = 'flex';
     document.getElementById('closeModal').onclick = () => document.getElementById('modal').style.display = 'none';
     window.onclick = (e) => { if (e.target == document.getElementById('modal')) document.getElementById('modal').style.display = 'none'; };
 
-    // Initial load
     update();
 </script>
 
