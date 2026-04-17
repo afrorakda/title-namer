@@ -55,7 +55,7 @@
             position: absolute; top: 12px; right: 15px; font-size: 0.6rem; 
             font-weight: 800; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px;
         }
-        #finalName { font-size: 1.4rem; font-weight: 800; color: var(--main); word-break: break-all; text-align: center; }
+        #finalName { font-size: 1.4rem; font-weight: 800; color: var(--main); word-break: break-all; text-align: center; line-height: 1.2; }
 
         .input-section { width: 100%; margin-bottom: 20px; }
         .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 5px; }
@@ -122,7 +122,7 @@
 
     <div class="result-card" id="resultCard">
         <span class="section-label">Tap to Copy</span>
-        <div id="finalName">260326_title_01</div>
+        <div id="finalName">260418_title_01</div>
     </div>
 
     <div class="input-section">
@@ -194,9 +194,11 @@
     const dateStr = getYYMMDD();
 
     function update() {
+        // スペース、記号、日本語（全角）などをすべてアンダーバーに置換し、連続を整理
         let name = projInput.value
-            .replace(/[\s\\/:*?"<>|]+/g, '_') 
-            .replace(/_+/g, '_');
+            .replace(/[^\w]/g, '_') // 英数字とアンダーバー以外を置換
+            .replace(/_+/g, '_')    // 連続を1つに
+            .replace(/^_+|_+$/g, ''); // 前後のアンダーバーを削除
         
         const displayLabel = name || "title";
         const seqStr = String(sequence).padStart(2, '0');
@@ -208,7 +210,12 @@
     plusBtn.onclick = () => { sequence++; seqDisplay.textContent = String(sequence).padStart(2, '0'); update(); };
     minusBtn.onclick = () => { if(sequence > 1) { sequence--; seqDisplay.textContent = String(sequence).padStart(2, '0'); update(); }};
 
-    clrAll.onclick = () => { projInput.value = ""; sequence = 1; seqDisplay.textContent = "01"; projInput.focus(); update(); };
+    clrAll.onclick = () => { 
+        projInput.value = ""; sequence = 1; 
+        seqDisplay.textContent = "01"; 
+        update();
+        projInput.focus(); 
+    };
 
     function copyResult() {
         navigator.clipboard.writeText(finalName.textContent).then(() => {
@@ -233,7 +240,10 @@
         } catch(e) {}
     }
     window.onload = loadFooter;
+
+    // 初期起動時の処理
     update();
+    projInput.focus(); // オートフォーカス
 </script>
 
 </body>
