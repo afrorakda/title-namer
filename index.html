@@ -242,11 +242,6 @@
     window.addEventListener('DOMContentLoaded', () => {
         update();
         loadFooter();
-        // 遅延を入れてフォーカスを確実に当てる
-        setTimeout(() => {
-            projInput.focus();
-            projInput.setSelectionRange(projInput.value.length, projInput.value.length);
-        }, 100);
     });
 </script>
 
