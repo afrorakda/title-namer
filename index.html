@@ -194,11 +194,10 @@
     const dateStr = getYYMMDD();
 
     function update() {
-        // スペース、記号、日本語（全角）などをすべてアンダーバーに置換し、連続を整理
         let name = projInput.value
-            .replace(/[^\w]/g, '_') // 英数字とアンダーバー以外を置換
-            .replace(/_+/g, '_')    // 連続を1つに
-            .replace(/^_+|_+$/g, ''); // 前後のアンダーバーを削除
+            .replace(/[^\w]/g, '_') 
+            .replace(/_+/g, '_')    
+            .replace(/^_+|_+$/g, ''); 
         
         const displayLabel = name || "title";
         const seqStr = String(sequence).padStart(2, '0');
@@ -239,11 +238,16 @@
             }
         } catch(e) {}
     }
-    window.onload = loadFooter;
 
-    // 初期起動時の処理
-    update();
-    projInput.focus(); // オートフォーカス
+    window.addEventListener('DOMContentLoaded', () => {
+        update();
+        loadFooter();
+        // 遅延を入れてフォーカスを確実に当てる
+        setTimeout(() => {
+            projInput.focus();
+            projInput.setSelectionRange(projInput.value.length, projInput.value.length);
+        }, 100);
+    });
 </script>
 
 </body>
